@@ -17,7 +17,6 @@ import android.view.View;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 import com.voipgrid.vialer.analytics.AnalyticsApplication;
-import com.voipgrid.vialer.analytics.AnalyticsHelper;
 import com.voipgrid.vialer.api.ApiTokenFetcher;
 import com.voipgrid.vialer.api.models.SystemUser;
 import com.voipgrid.vialer.callrecord.CallRecordFragment;
@@ -38,6 +37,9 @@ import com.voipgrid.vialer.util.PhoneAccountHelper;
 import com.voipgrid.vialer.util.UpdateActivity;
 import com.voipgrid.vialer.util.UpdateHelper;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 
 public class MainActivity extends NavigationDrawerActivity implements
         View.OnClickListener,
@@ -51,6 +53,8 @@ public class MainActivity extends NavigationDrawerActivity implements
     private DialHelper mDialHelper;
 
     private ReachabilityReceiver mReachabilityReceiver;
+
+    @BindView(R.id.encryption_bar) EncryptionBarView mEncryptionBarView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -128,6 +132,8 @@ public class MainActivity extends NavigationDrawerActivity implements
 
         requestCounter = 0;
         mReachabilityReceiver = new ReachabilityReceiver(this);
+
+        ButterKnife.bind(this);
     }
 
     /**
@@ -177,6 +183,7 @@ public class MainActivity extends NavigationDrawerActivity implements
         askForPermissions(requestCounter);
         mReachabilityReceiver.startListening();
         super.onResume();
+        mEncryptionBarView.refresh();
     }
 
     @Override

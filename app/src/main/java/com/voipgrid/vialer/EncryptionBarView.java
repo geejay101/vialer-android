@@ -36,6 +36,9 @@ public class EncryptionBarView extends RelativeLayout {
      */
     protected static boolean sIsEligibleToDisplay = false;
 
+    private RelativeLayout mBar;
+    private SecureCalling mSecureCalling;
+
     public EncryptionBarView(Context context) {
         super(context);
         initLayout(context);
@@ -52,22 +55,26 @@ public class EncryptionBarView extends RelativeLayout {
     }
 
     private void initLayout(Context context) {
-        RelativeLayout bar = (RelativeLayout) LayoutInflater.from(context).inflate(
+        mBar = (RelativeLayout) LayoutInflater.from(context).inflate(
                 R.layout.view_reachability_bar, this);
 
-        SecureCalling secureCalling = SecureCalling.fromContext(context);
+        mSecureCalling = SecureCalling.fromContext(context);
 
-        ButterKnife.bind(bar);
+        ButterKnife.bind(mBar);
 
+        refresh();
+    }
+
+    public void refresh() {
         barText.setText(R.string.call_not_encrypted_warning_bar_text);
         barImage.setVisibility(GONE);
-        bar.setVisibility(GONE);
+        mBar.setVisibility(GONE);
 
-        registerReceiver(context);
+        registerReceiver(VialerApplication.get());
 
-        if (!sIsEligibleToDisplay || secureCalling.isEnabled()) return;
+        if (!sIsEligibleToDisplay || mSecureCalling.isEnabled()) return;
 
-        bar.setVisibility(VISIBLE);
+        mBar.setVisibility(VISIBLE);
     }
 
     /**
